@@ -35,11 +35,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     rateLimitMap.set(clientIp, now);
 
-    // 2. Extract Body & Perform Validation
-    const { fullName, email, message } = req.body || {};
+    // 2. Anti-Spam Honeypot Check
+    const { fullName, email, phone, message, botField } = req.body || {};
+    if (botField) {
+      // Quietly succeed for bot submissions without sending email
+      return res.status(200).json({
+        success: true,
+        message: 'Thank you! Your message has been sent successfully.',
+      });
+    }
 
+    // 3. Extract & Validate Body Parameters
     const trimmedName = typeof fullName === 'string' ? fullName.trim() : '';
     const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const trimmedPhone = typeof phone === 'string' ? phone.trim() : '';
     const trimmedMessage = typeof message === 'string' ? message.trim() : '';
 
     if (!trimmedName) {
@@ -51,6 +60,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
     }
 
+    if (trimmedPhone && !/^[+]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/.test(trimmedPhone)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid phone number.' });
+    }
+
     if (!trimmedMessage) {
       return res.status(400).json({ success: false, message: 'Message content cannot be empty.' });
     }
@@ -59,14 +72,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, message: 'Message cannot exceed 500 characters.' });
     }
 
-    // 3. Send Email Notification
-    await sendContactEmail({
+    // 4. Send Email Notification to Admin
+    const emailResult = await sendContactEmail({
       fullName: trimmedName,
       email: trimmedEmail,
+      phone: trimmedPhone || undefined,
       message: trimmedMessage,
     });
 
-    return res.status(200).json({ success: true });
+    if (!emailResult.success) {
+      return res.status(500).json({
+        success: false,
+        message: emailResult.error || 'Failed to send your message via email. Please try again.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Thank you! Your message has been sent successfully.',
+    });
   } catch (error: any) {
     console.error('API /api/contact error:', error);
     return res.status(500).json({

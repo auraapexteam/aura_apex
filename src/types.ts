@@ -41,5 +41,7 @@ export interface DemoFormData {
 export interface ContactFormData {
   fullName: string;
   email: string;
+  phone?: string;
   message: string;
+  botField?: string;
 }

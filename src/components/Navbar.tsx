@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dumbbell, Menu, X, ArrowUpRight, Sparkles, Compass } from 'lucide-react';
+import { Dumbbell, Menu, X, ArrowUpRight, Sparkles, Compass, Download } from 'lucide-react';
+import { APP_DOWNLOAD_LINK } from '../constants';
 
 interface NavbarProps {
   onOpenBookDemo: () => void;
@@ -68,6 +69,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
 
           {/* CTA Buttons & Mobile Hamburger */}
           <div className="flex items-center gap-3">
+            {/* Download App CTA */}
+            <a
+              href={APP_DOWNLOAD_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyber-lime text-black font-bold text-xs sm:text-sm hover:bg-cyber-limeHover transition-all duration-300 shadow-lime-glow hover:scale-105 active:scale-95"
+            >
+              <Download className="w-4 h-4 text-black" />
+              <span>Download App</span>
+            </a>
+
             {/* Explore Platform CTA */}
             <a
               href="#ecosystem"
@@ -80,11 +92,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
             {/* Book a Demo CTA */}
             <button
               onClick={onOpenBookDemo}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-cyber-lime text-black font-bold text-xs sm:text-sm hover:bg-cyber-limeHover transition-all duration-300 shadow-lime-glow hover:scale-105 active:scale-95"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-cyber-card border border-white/10 text-white font-semibold text-xs sm:text-sm hover:border-cyber-lime/50 hover:text-cyber-lime transition-all duration-300"
             >
-              <Sparkles className="w-4 h-4 text-black" />
+              <Sparkles className="w-4 h-4 text-cyber-lime" />
               <span>Book a Demo</span>
-              <ArrowUpRight className="w-4 h-4 text-black" />
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:text-cyber-lime" />
             </button>
 
             {/* Mobile Hamburger Toggle */}
@@ -126,6 +138,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
 
               <div className="pt-2 space-y-3">
                 <a
+                  href={APP_DOWNLOAD_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-lime text-black font-bold text-base hover:bg-cyber-limeHover transition-all shadow-lime-glow"
+                >
+                  <Download className="w-5 h-5 text-black" />
+                  <span>Download App</span>
+                </a>
+
+                <a
                   href="#ecosystem"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-bg border border-white/10 text-white font-semibold text-sm hover:border-cyber-lime"
@@ -139,9 +162,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
                     setMobileMenuOpen(false);
                     onOpenBookDemo();
                   }}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-lime text-black font-bold text-base hover:bg-cyber-limeHover transition-all shadow-lime-glow"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-card border border-white/10 text-white font-semibold text-sm hover:border-cyber-lime"
                 >
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5 text-cyber-lime" />
                   <span>Book a Demo</span>
                   <ArrowUpRight className="w-5 h-5" />
                 </button>

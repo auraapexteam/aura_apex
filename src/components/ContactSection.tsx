@@ -7,10 +7,12 @@ export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
     email: '',
+    phone: '',
     message: '',
+    botField: '',
   });
 
-  const [errors, setErrors] = useState<{ fullName?: string; email?: string; message?: string }>({});
+  const [errors, setErrors] = useState<{ fullName?: string; email?: string; phone?: string; message?: string }>({});
   const [serverError, setServerError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -18,7 +20,7 @@ export const ContactSection: React.FC = () => {
   const MAX_CHARACTERS = 500;
 
   const validate = () => {
-    const newErrors: { fullName?: string; email?: string; message?: string } = {};
+    const newErrors: { fullName?: string; email?: string; phone?: string; message?: string } = {};
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full Name is required';
@@ -28,6 +30,10 @@ export const ContactSection: React.FC = () => {
       newErrors.email = 'Email Address is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (formData.phone && formData.phone.trim() && !/^[+]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/.test(formData.phone.trim())) {
+      newErrors.phone = 'Please enter a valid phone number';
     }
 
     if (!formData.message.trim()) {
@@ -59,14 +65,14 @@ export const ContactSection: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        setServerError(data.message || 'Something went wrong. Please try again.');
+        setServerError(data.message || 'Failed to send message. Please try again.');
         setIsSubmitting(false);
         return;
       }
 
       setIsSubmitting(false);
       setIsSuccess(true);
-      setFormData({ fullName: '', email: '', message: '' });
+      setFormData({ fullName: '', email: '', phone: '', message: '', botField: '' });
       setErrors({});
     } catch (err) {
       console.error('Contact submission error:', err);
@@ -182,9 +188,9 @@ export const ContactSection: React.FC = () => {
                     <div className="w-16 h-16 rounded-full bg-cyber-lime/20 border border-cyber-lime text-cyber-lime flex items-center justify-center mx-auto shadow-lime-glow">
                       <CheckCircle2 className="w-8 h-8" />
                     </div>
-                    <h4 className="text-2xl font-bold text-white">Message Transmitted!</h4>
+                    <h4 className="text-2xl font-bold text-white">Thank you! Your message has been sent successfully.</h4>
                     <p className="text-sm text-cyber-textMuted max-w-md mx-auto">
-                      Thank you for contacting Aura Apex. Our team will review your message and reach out shortly.
+                      We have received your message and sent a notification to <strong className="text-cyber-lime">auraapex04@gmail.com</strong>. Our team will get back to you shortly.
                     </p>
                     <button
                       onClick={() => {
@@ -198,6 +204,17 @@ export const ContactSection: React.FC = () => {
                   </motion.div>
                 ) : (
                   <form key="form" onSubmit={handleSubmit} className="space-y-5" noValidate>
+                    {/* Anti-Spam Honeypot Field */}
+                    <input
+                      type="text"
+                      name="botField"
+                      value={formData.botField || ''}
+                      onChange={(e) => setFormData({ ...formData, botField: e.target.value })}
+                      style={{ display: 'none' }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+
                     {/* Full Name */}
                     <div>
                       <label className="block text-xs font-medium text-gray-300 mb-1.5" htmlFor="fullName">
@@ -256,6 +273,37 @@ export const ContactSection: React.FC = () => {
                       {errors.email && (
                         <p className="text-[11px] text-red-400 mt-1 flex items-center gap-1">
                           <AlertCircle className="w-3 h-3" /> {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Phone Number (Optional) */}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-300 mb-1.5" htmlFor="phone">
+                        Phone Number <span className="text-cyber-textMuted">(Optional)</span>
+                      </label>
+                      <div className="relative">
+                        <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-cyber-textMuted" />
+                        <input
+                          id="phone"
+                          type="tel"
+                          value={formData.phone || ''}
+                          onChange={(e) => {
+                            setFormData({ ...formData, phone: e.target.value });
+                            if (errors.phone) setErrors({ ...errors, phone: undefined });
+                            if (serverError) setServerError('');
+                          }}
+                          placeholder="+91 98765 43210"
+                          className={`w-full pl-10 pr-4 py-3 rounded-xl bg-cyber-bg border text-sm text-white focus:outline-none transition-colors ${
+                            errors.phone
+                              ? 'border-red-500/80 focus:border-red-500'
+                              : 'border-white/10 focus:border-cyber-lime'
+                          }`}
+                        />
+                      </div>
+                      {errors.phone && (
+                        <p className="text-[11px] text-red-400 mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" /> {errors.phone}
                         </p>
                       )}
                     </div>

@@ -19,34 +19,52 @@ export function getKolkataTimestamp(): string {
 }
 
 /**
- * Send Contact Form Email to Admin
+ * Send Contact Form Email to Admin (auraapex04@gmail.com)
  */
 export async function sendContactEmail(payload: {
   fullName: string;
   email: string;
+  phone?: string;
   message: string;
-}): Promise<{ success: boolean; id?: string }> {
+}): Promise<{ success: boolean; id?: string; error?: string }> {
   if (!resend) {
-    console.warn('[EMAIL SERVICE] RESEND_API_KEY is not configured. Email notification skipped in dev mode.');
+    console.warn('[EMAIL SERVICE] RESEND_API_KEY is not configured. Email notification simulated in dev mode.');
     return { success: true, id: 'dev-mode-simulated' };
   }
 
   const timestamp = getKolkataTimestamp();
 
   const htmlContent = `
-    <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 24px; border-radius: 12px;">
+    <div style="font-family: Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 24px; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #222422;">
       <h2 style="color: #ccff00; border-bottom: 1px solid #222422; padding-bottom: 12px; margin-top: 0;">
         New Aura Apex Contact Form Submission
       </h2>
-      <p><strong>Full Name:</strong> ${escapeHtml(payload.fullName)}</p>
-      <p><strong>Email Address:</strong> <a href="mailto:${escapeHtml(payload.email)}" style="color: #ccff00;">${escapeHtml(payload.email)}</a></p>
-      <p><strong>Submission Timestamp (IST):</strong> ${timestamp}</p>
-      <div style="background-color: #121312; border: 1px solid #222422; padding: 16px; border-radius: 8px; margin-top: 16px;">
-        <h4 style="color: #a1a1aa; margin-top: 0;">Message:</h4>
-        <p style="white-space: pre-wrap; color: #e4e4e7;">${escapeHtml(payload.message)}</p>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
+        <tr>
+          <td style="padding: 8px 0; color: #a1a1aa; width: 140px;"><strong>Full Name:</strong></td>
+          <td style="padding: 8px 0; color: #ffffff; font-weight: bold;">${escapeHtml(payload.fullName)}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #a1a1aa;"><strong>Email Address:</strong></td>
+          <td style="padding: 8px 0; color: #ffffff;"><a href="mailto:${escapeHtml(payload.email)}" style="color: #ccff00;">${escapeHtml(payload.email)}</a></td>
+        </tr>
+        ${payload.phone ? `
+        <tr>
+          <td style="padding: 8px 0; color: #a1a1aa;"><strong>Phone Number:</strong></td>
+          <td style="padding: 8px 0; color: #ffffff;"><a href="tel:${escapeHtml(payload.phone)}" style="color: #ccff00;">${escapeHtml(payload.phone)}</a></td>
+        </tr>
+        ` : ''}
+        <tr>
+          <td style="padding: 8px 0; color: #a1a1aa;"><strong>Submission Date:</strong></td>
+          <td style="padding: 8px 0; color: #ffffff;">${timestamp}</td>
+        </tr>
+      </table>
+      <div style="background-color: #121312; border: 1px solid #222422; padding: 16px; border-radius: 8px; margin-top: 20px;">
+        <h4 style="color: #a1a1aa; margin-top: 0; margin-bottom: 8px;">Message:</h4>
+        <p style="white-space: pre-wrap; color: #e4e4e7; margin: 0; line-height: 1.6;">${escapeHtml(payload.message)}</p>
       </div>
-      <footer style="margin-top: 24px; font-size: 12px; color: #a1a1aa; border-top: 1px solid #222422; padding-top: 12px;">
-        Aura Apex Production Notification Engine &bull; Asia/Kolkata
+      <footer style="margin-top: 24px; font-size: 12px; color: #a1a1aa; border-top: 1px solid #222422; padding-top: 12px; text-align: center;">
+        Aura Apex Production Notification Engine &bull; Recipient: ${ADMIN_EMAIL}
       </footer>
     </div>
   `;
@@ -55,19 +73,20 @@ export async function sendContactEmail(payload: {
     const response = await resend.emails.send({
       from: SENDER_EMAIL,
       to: [ADMIN_EMAIL],
-      subject: 'New Aura Apex Contact Form Submission',
+      subject: `New Contact Message from ${payload.fullName}`,
       html: htmlContent,
       replyTo: payload.email,
     });
 
     if (response.error) {
       console.warn('[EMAIL SERVICE] Resend email warning:', response.error.message);
+      return { success: false, error: response.error.message };
     }
 
     return { success: true, id: response.data?.id };
   } catch (err: any) {
-    console.warn('[EMAIL SERVICE] Contact email send error:', err.message || err);
-    return { success: true, id: 'notice-skipped' };
+    console.error('[EMAIL SERVICE] Contact email send error:', err.message || err);
+    return { success: false, error: err.message || 'Failed to deliver email message' };
   }
 }
 
