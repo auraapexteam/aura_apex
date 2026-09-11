@@ -23,6 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
     { name: 'About', href: '#about' },
     { name: 'Ecosystem', href: '#ecosystem' },
     { name: 'Contact', href: '#contact' },
+    { name: 'Download', href: '#download' },
   ];
 
   return (
