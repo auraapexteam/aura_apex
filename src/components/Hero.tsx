@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Dumbbell, ArrowRight, Sparkles, Activity, Users, Building2, Flame, HeartPulse, Trophy, Download } from 'lucide-react';
-import { APP_DOWNLOAD_LINK } from '../constants';
+import { Dumbbell, ArrowRight, Sparkles, Activity, Users, Building2, Flame, HeartPulse, Trophy } from 'lucide-react';
 
 interface HeroProps {
   onOpenBookDemo: () => void;
@@ -58,17 +57,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
           >
-            {/* Download App Primary CTA */}
-            <a
-              href={APP_DOWNLOAD_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-cyber-lime text-black font-bold text-base hover:bg-cyber-limeHover transition-all duration-300 shadow-lime-glow hover:scale-105 active:scale-95 group"
-            >
-              <Download className="w-5 h-5 text-black" />
-              <span>Download the App</span>
-            </a>
-
             <a
               href="#ecosystem"
               className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-cyber-card border border-white/10 text-white font-semibold text-base hover:border-cyber-lime/30 hover:bg-cyber-cardHover transition-all duration-300 group"

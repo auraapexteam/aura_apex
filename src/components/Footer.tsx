@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Dumbbell, Github, Twitter, Linkedin, ArrowRight, CheckCircle, Download } from 'lucide-react';
-import { APP_DOWNLOAD_LINK } from '../constants';
+import { Dumbbell, Github, Twitter, Linkedin, ArrowRight, CheckCircle } from 'lucide-react';
 
 interface FooterProps {
   onOpenBookDemo?: () => void;
@@ -61,16 +60,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBookDemo }) => {
               Product
             </h4>
             <ul className="space-y-2 text-xs text-cyber-textMuted font-medium">
-              <li>
-                <a
-                  href={APP_DOWNLOAD_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyber-lime font-semibold hover:underline inline-flex items-center gap-1.5"
-                >
-                  <Download className="w-3.5 h-3.5" /> Download App
-                </a>
-              </li>
               <li><a href="#ecosystem" className="hover:text-cyber-lime transition-colors">User App</a></li>
               <li><a href="#ecosystem" className="hover:text-cyber-lime transition-colors">Gym Platform</a></li>
               <li><a href="#ecosystem" className="hover:text-cyber-lime transition-colors">Admin Dashboard</a></li>
