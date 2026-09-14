@@ -34,13 +34,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <a
             href="#"
-            className="flex items-center gap-3 group text-white font-extrabold text-xl tracking-wider"
+            className="flex items-center gap-1.5 sm:gap-3 group text-white font-extrabold text-[13px] sm:text-xl tracking-wider"
           >
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-cyber-card border border-cyber-cardBorder group-hover:border-cyber-lime transition-all duration-300 shadow-lime-glow-sm">
+            <div className="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-xl bg-cyber-card border border-cyber-cardBorder group-hover:border-cyber-lime transition-all duration-300 shadow-lime-glow-sm">
               <Dumbbell className="w-5 h-5 text-cyber-lime group-hover:rotate-12 transition-transform duration-300" />
               <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-cyber-lime animate-ping" />
             </div>
@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
               <span className="font-extrabold tracking-tight text-white flex items-center gap-1.5">
                 AURA <span className="text-cyber-lime">APEX</span>
               </span>
-              <span className="text-[9px] text-cyber-textMuted font-mono tracking-widest -mt-1">
+              <span className="text-[8px] sm:text-[9px] whitespace-nowrap text-cyber-textMuted font-mono tracking-widest -mt-1">
                 FITNESS TECH
               </span>
             </div>
@@ -68,13 +68,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
           </nav>
 
           {/* CTA Buttons & Mobile Hamburger */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             {/* Download App CTA */}
             <a
               href={APP_DOWNLOAD_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyber-lime text-black font-bold text-xs sm:text-sm hover:bg-cyber-limeHover transition-all duration-300 shadow-lime-glow hover:scale-105 active:scale-95"
+              className="inline-flex shrink-0 items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 min-h-11 sm:min-h-0 whitespace-nowrap rounded-full bg-cyber-lime text-black font-bold text-[11px] sm:text-sm hover:bg-cyber-limeHover transition-all duration-300 shadow-lime-glow hover:scale-105 active:scale-95"
             >
               <Download className="w-4 h-4 text-black" />
               <span>Download App</span>
@@ -137,17 +137,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
               </div>
 
               <div className="pt-2 space-y-3">
-                <a
-                  href={APP_DOWNLOAD_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-lime text-black font-bold text-base hover:bg-cyber-limeHover transition-all shadow-lime-glow"
-                >
-                  <Download className="w-5 h-5 text-black" />
-                  <span>Download App</span>
-                </a>
-
                 <a
                   href="#ecosystem"
                   onClick={() => setMobileMenuOpen(false)}
