@@ -4,8 +4,12 @@ import { Resend } from 'resend';
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
-export const ADMIN_EMAIL = process.env.CONTACT_EMAIL || 'auraapex04@gmail.com';
-export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'Aura Apex <onboarding@resend.dev>';
+export const ADMIN_EMAIL = process.env.CONTACT_EMAIL || 'contact@auraapex.in';
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || '';
+
+export function isEmailConfigured(): boolean {
+  return Boolean(resend && SENDER_EMAIL.trim());
+}
 
 /**
  * Format current timestamp in Asia/Kolkata timezone
@@ -19,7 +23,7 @@ export function getKolkataTimestamp(): string {
 }
 
 /**
- * Send Contact Form Email to Admin (auraapex04@gmail.com)
+ * Send a contact notification to the configured support inbox.
  */
 export async function sendContactEmail(payload: {
   fullName: string;
@@ -27,9 +31,8 @@ export async function sendContactEmail(payload: {
   phone?: string;
   message: string;
 }): Promise<{ success: boolean; id?: string; error?: string }> {
-  if (!resend) {
-    console.warn('[EMAIL SERVICE] RESEND_API_KEY is not configured. Email notification simulated in dev mode.');
-    return { success: true, id: 'dev-mode-simulated' };
+  if (!resend || !isEmailConfigured()) {
+    return { success: false, error: 'Email service is unavailable. Please email contact@auraapex.in directly.' };
   }
 
   const timestamp = getKolkataTimestamp();
@@ -80,13 +83,13 @@ export async function sendContactEmail(payload: {
 
     if (response.error) {
       console.warn('[EMAIL SERVICE] Resend email warning:', response.error.message);
-      return { success: false, error: response.error.message };
+      return { success: false, error: 'Email delivery could not be confirmed. Please email contact@auraapex.in directly.' };
     }
 
-    return { success: true, id: response.data?.id };
+    return response.data?.id ? { success: true, id: response.data.id } : { success: false, error: 'Email delivery could not be confirmed. Please email contact@auraapex.in directly.' };
   } catch (err: any) {
     console.error('[EMAIL SERVICE] Contact email send error:', err.message || err);
-    return { success: false, error: err.message || 'Failed to deliver email message' };
+    return { success: false, error: 'Email delivery could not be confirmed. Please email contact@auraapex.in directly.' };
   }
 }
 
@@ -102,9 +105,8 @@ export async function sendDemoEmails(payload: {
   date: string;
   timeSlot: string;
 }): Promise<{ success: boolean }> {
-  if (!resend) {
-    console.warn('[EMAIL SERVICE] RESEND_API_KEY is not configured. Demo confirmation email skipped in dev mode.');
-    return { success: true };
+  if (!resend || !isEmailConfigured()) {
+    return { success: false };
   }
 
   const timestamp = getKolkataTimestamp();
@@ -140,7 +142,7 @@ export async function sendDemoEmails(payload: {
         Hi ${escapeHtml(payload.fullName)},
       </p>
       <p style="color: #a1a1aa; line-height: 1.6;">
-        Your 1-on-1 Aura Apex platform demonstration session has been officially confirmed. We look forward to showing you how our fitness technology platform can empower ${escapeHtml(payload.companyName)}.
+        Your Aura Apex demo booking has been saved for ${escapeHtml(payload.companyName)}. The team will contact you about meeting arrangements.
       </p>
       <div style="background-color: #121312; border: 1px solid #ccff00; padding: 20px; border-radius: 12px; margin: 20px 0;">
         <h4 style="color: #ccff00; margin-top: 0; font-family: monospace;">BOOKING CONFIRMATION: ${escapeHtml(payload.bookingId)}</h4>
@@ -152,12 +154,13 @@ export async function sendDemoEmails(payload: {
         If you need to reschedule or have questions prior to the call, please reply to this email or reach us at <a href="mailto:${ADMIN_EMAIL}" style="color: #ccff00;">${ADMIN_EMAIL}</a>.
       </p>
       <footer style="margin-top: 24px; font-size: 12px; color: #a1a1aa; border-top: 1px solid #222422; padding-top: 12px;">
-        &copy; 2024 Aura Apex, Inc. All rights reserved. &bull; San Francisco, CA
+        &copy; ${new Date().getFullYear()} Aura Apex. All rights reserved.
       </footer>
     </div>
   `;
 
-  // Send admin notification
+  let allAccepted = true;
+  // A saved booking and provider-accepted notifications are distinct outcomes.
   try {
     const adminRes = await resend.emails.send({
       from: SENDER_EMAIL,
@@ -165,10 +168,12 @@ export async function sendDemoEmails(payload: {
       subject: 'New Aura Apex Demo Booking',
       html: adminHtml,
     });
-    if (adminRes.error) {
-      console.warn('[EMAIL SERVICE] Admin demo email warning:', adminRes.error.message);
+    if (adminRes.error || !adminRes.data?.id) {
+      allAccepted = false;
+      console.warn('[EMAIL SERVICE] Admin demo email was not accepted.');
     }
   } catch (err: any) {
+    allAccepted = false;
     console.warn('[EMAIL SERVICE] Admin demo email failed:', err.message || err);
   }
 
@@ -179,15 +184,18 @@ export async function sendDemoEmails(payload: {
       to: [payload.email],
       subject: `Aura Apex Demo Confirmation - ${payload.bookingId}`,
       html: visitorHtml,
+      replyTo: ADMIN_EMAIL,
     });
-    if (visitorRes.error) {
-      console.warn('[EMAIL SERVICE] Visitor confirmation email warning (Resend free/testing tier restriction):', visitorRes.error.message);
+    if (visitorRes.error || !visitorRes.data?.id) {
+      allAccepted = false;
+      console.warn('[EMAIL SERVICE] Visitor demo email was not accepted.');
     }
   } catch (err: any) {
+    allAccepted = false;
     console.warn('[EMAIL SERVICE] Visitor confirmation email failed:', err.message || err);
   }
 
-  return { success: true };
+  return { success: allAccepted };
 }
 
 function escapeHtml(str: string): string {

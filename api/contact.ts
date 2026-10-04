@@ -1,14 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { sendContactEmail } from './_email.js';
+import { isEmailConfigured, sendContactEmail } from './_email.js';
 
 // In-memory rate limiting map for basic IP protection (IP -> last timestamp)
 const rateLimitMap = new Map<string, number>();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS Headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -73,6 +72,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // 4. Send Email Notification to Admin
+    if (!isEmailConfigured()) {
+      return res.status(503).json({ success: false, message: 'The contact form is unavailable. Please email contact@auraapex.in directly.' });
+    }
     const emailResult = await sendContactEmail({
       fullName: trimmedName,
       email: trimmedEmail,
@@ -89,7 +91,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({
       success: true,
-      message: 'Thank you! Your message has been sent successfully.',
+      message: 'Your message was accepted by the email provider for delivery to the Aura Apex team.',
     });
   } catch (error: any) {
     console.error('API /api/contact error:', error);
