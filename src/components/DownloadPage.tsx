@@ -30,7 +30,7 @@ export const DownloadPage: React.FC = () => (
         </a>
         <p className="mt-4 text-xs text-cyber-textMuted">Open the downloaded APK on your Android device to install.</p>
       </div>
-      <a href="#" className="mt-8 inline-flex items-center gap-2 text-sm text-cyber-textMuted hover:text-cyber-lime transition-colors">
+      <a href="/" className="mt-8 inline-flex items-center gap-2 text-sm text-cyber-textMuted hover:text-cyber-lime transition-colors">
         <ArrowLeft className="w-4 h-4" aria-hidden="true" /> Back to home
       </a>
     </div>

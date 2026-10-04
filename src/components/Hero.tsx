@@ -47,7 +47,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg sm:text-xl text-cyber-textMuted max-w-2xl mx-auto font-normal leading-relaxed"
           >
-            Aura Apex is transforming the fitness industry through technology &mdash; connecting users, gym owners, trainers, and wellness partners into one intelligent ecosystem.
+            Discover gyms, manage your membership and track personal fitness habits. Aura Apex brings members and gym teams together.
           </motion.p>
 
           {/* Action Buttons */}
@@ -90,13 +90,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 <span className="ml-3 text-xs font-mono text-cyber-textMuted hidden sm:inline">
-                  aura-apex://fitness-intelligence-v2.4
+                  AURA APEX · PLATFORM OVERVIEW
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyber-lime/10 border border-cyber-lime/30 text-cyber-lime text-xs font-mono">
                   <span className="w-2 h-2 rounded-full bg-cyber-lime animate-ping" />
-                  LIVE FITNESS ECOSYSTEM
+                  ILLUSTRATIVE OVERVIEW
                 </span>
               </div>
             </div>
@@ -107,9 +107,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
               <div className="p-4 rounded-lg bg-cyber-bg border border-white/5 space-y-3">
                 <div className="flex items-center justify-between text-xs text-cyber-textMuted font-mono">
                   <span className="flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-cyber-lime" /> Member Energy Burn
+                    <Activity className="w-4 h-4 text-cyber-lime" /> Personal progress
                   </span>
-                  <span className="text-cyber-lime font-bold">842 kcal avg</span>
+                  <span className="text-cyber-lime font-bold">Your logbook</span>
                 </div>
                 <div className="h-24 flex items-end gap-1 pt-4">
                   {[45, 60, 75, 50, 90, 80, 85, 95, 70, 88, 92, 85, 65, 98].map((val, i) => (
@@ -121,8 +121,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
                   ))}
                 </div>
                 <div className="flex justify-between text-[10px] text-cyber-textMuted font-mono pt-1">
-                  <span>WORKOUT PEAK</span>
-                  <span>50K+ ACTIVE USERS</span>
+                  <span>EXAMPLE CHART</span>
+                  <span>MANUAL FITNESS LOGS</span>
                 </div>
               </div>
 
@@ -130,15 +130,15 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
               <div className="p-4 rounded-lg bg-cyber-bg border border-white/5 space-y-3">
                 <div className="flex items-center justify-between text-xs text-cyber-textMuted font-mono">
                   <span className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-cyber-lime" /> Connected Facilities
+                    <Building2 className="w-4 h-4 text-cyber-lime" /> Gym operations
                   </span>
-                  <span className="text-white font-bold">2,000+ Gyms</span>
+                  <span className="text-white font-bold">Web portal</span>
                 </div>
                 <div className="space-y-2 pt-1">
                   {[
-                    { label: 'Automated Check-Ins', value: '14,280/hr' },
-                    { label: 'Trainer Sessions Active', value: '3,840 Live' },
-                    { label: 'Member Retention SLA', value: '98% Score' },
+                    { label: 'Member accounts', value: 'Manage' },
+                    { label: 'Plans and payments', value: 'View' },
+                    { label: 'Gym check-ins', value: 'Track' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center justify-between text-xs p-2 rounded bg-white/5">
                       <span className="text-gray-300">{item.label}</span>
@@ -152,23 +152,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo }) => {
               <div className="p-4 rounded-lg bg-cyber-bg border border-white/5 space-y-3">
                 <div className="flex items-center justify-between text-xs text-cyber-textMuted font-mono">
                   <span className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-cyber-lime" /> Member Satisfaction
+                    <Trophy className="w-4 h-4 text-cyber-lime" /> Member routine
                   </span>
-                  <span className="text-cyber-lime font-bold">98% Rating</span>
+                  <span className="text-cyber-lime font-bold">Day by day</span>
                 </div>
                 <div className="p-3 rounded bg-cyber-card border border-white/10 space-y-2 text-xs font-mono">
                   <div className="text-cyber-lime text-[11px] font-semibold flex items-center gap-1.5">
-                    <Flame className="w-3.5 h-3.5" /> SMART PREDICTIVE RETENTION
+                    <Flame className="w-3.5 h-3.5" /> BUILD YOUR ROUTINE
                   </div>
                   <div className="text-gray-400 text-[10px]">
-                    40+ CITIES &bull; FULLY INTEGRATED ECOSYSTEM
+                    MEMBERSHIP &bull; ATTENDANCE &bull; FITNESS
                   </div>
                   <div className="text-gray-400 text-[10px]">
-                    ZERO FRAGMENTATION &bull; REAL-TIME SYNC
+                    YOUR GYM &bull; YOUR PERSONAL LOGBOOK
                   </div>
                 </div>
                 <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div className="h-full bg-cyber-lime w-[98%] animate-pulse" />
+                  <div className="h-full bg-cyber-lime w-2/3" />
                 </div>
               </div>
             </div>
