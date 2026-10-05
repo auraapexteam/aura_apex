@@ -11,24 +11,33 @@ import { BookDemoModal } from './components/BookDemoModal';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Footer } from './components/Footer';
 import { DownloadPage } from './components/DownloadPage';
+import { PublicPage } from './components/PublicPages';
+import { resolvePage } from './routing';
 
 export function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [isDownloadPage, setIsDownloadPage] = useState(window.location.hash === '#download');
+  const [location, setLocation] = useState({ pathname: window.location.pathname, hash: window.location.hash });
+  const page = resolvePage(location.pathname, location.hash);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const downloading = window.location.hash === '#download';
-      setIsDownloadPage(downloading);
-      requestAnimationFrame(() => {
-        const section = document.getElementById(window.location.hash.slice(1));
-        if (!downloading && section) section.scrollIntoView();
-        else window.scrollTo(0, 0);
-      });
+    const updateLocation = () => setLocation({ pathname: window.location.pathname, hash: window.location.hash });
+    window.addEventListener('hashchange', updateLocation);
+    window.addEventListener('popstate', updateLocation);
+    return () => {
+      window.removeEventListener('hashchange', updateLocation);
+      window.removeEventListener('popstate', updateLocation);
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  useEffect(() => {
+    const titles = { home: 'Gym memberships and fitness', download: 'Download for Android', privacy: 'Privacy policy review draft', terms: 'Terms of service review draft', support: 'Support', 'delete-account': 'Request account deletion', 'not-found': 'Page not found' };
+    document.title = `${titles[page]} | Aura Apex`;
+    requestAnimationFrame(() => {
+      const section = page === 'home' ? document.getElementById(location.hash.slice(1)) : null;
+      if (section) section.scrollIntoView();
+      else window.scrollTo(0, 0);
+    });
+  }, [page, location.hash]);
 
   const openBookDemo = () => setIsDemoModalOpen(true);
   const closeBookDemo = () => setIsDemoModalOpen(false);
@@ -40,7 +49,7 @@ export function App() {
 
       {/* Main Content Sections */}
       <main>
-        {isDownloadPage ? <DownloadPage /> : <>
+        {page === 'download' ? <DownloadPage /> : page === 'home' ? <>
         <Hero onOpenBookDemo={openBookDemo} />
         <Stats />
         <About />
@@ -48,7 +57,7 @@ export function App() {
         <Ecosystem />
         <WhyAuraApex />
         <ContactSection />
-        </>}
+        </> : <PublicPage page={page} />}
       </main>
 
       {/* Footer */}

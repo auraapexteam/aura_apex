@@ -1,16 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { executeQuery } from './_db.js';
-import { sendDemoEmails } from './_email.js';
+import { isEmailConfigured, sendDemoEmails } from './_email.js';
 import crypto from 'crypto';
+import { isOfferedDemoDate, isOfferedDemoTime } from '../shared/demo-schedule.js';
 
 // In-memory rate limiting map (IP -> timestamp)
 const rateLimitMap = new Map<string, number>();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS Headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -47,12 +47,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const trimmedCompany = typeof companyName === 'string' ? companyName.trim() : '';
     const trimmedTeam = typeof teamSize === 'string' ? teamSize.trim() : '10-50';
 
-    if (!trimmedDate) {
-      return res.status(400).json({ success: false, message: 'Please select a date for your demo.' });
+    if (!isOfferedDemoDate(trimmedDate)) {
+      return res.status(400).json({ success: false, message: 'Please select one of the next available weekdays. Past dates and dates outside the booking window cannot be booked.' });
     }
 
-    if (!trimmedTime) {
-      return res.status(400).json({ success: false, message: 'Please select a time slot for your demo.' });
+    if (!isOfferedDemoTime(trimmedTime)) {
+      return res.status(400).json({ success: false, message: 'Please select a listed time slot for your demo.' });
     }
 
     if (!trimmedName) {
@@ -68,8 +68,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, message: 'Please enter your company or gym name.' });
     }
 
-    // 3. Database Check & Storage (If DATABASE_URL is configured)
-    let bookingId = `APEX-2026-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
+    if (!process.env.DATABASE_URL || !isEmailConfigured()) {
+      return res.status(503).json({ success: false, message: 'Online demo booking is unavailable. Please email contact@auraapex.in to arrange a walkthrough.' });
+    }
+
+    // 3. Store the booking only when its required services are configured.
+    const bookingId = `APEX-${new Date().getFullYear()}-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
 
     if (process.env.DATABASE_URL) {
       // Double Booking Check (booking_date + booking_time)
@@ -92,12 +96,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
          VALUES ($1, $2, $3, $4, $5, $6, $7, 'CONFIRMED')`,
         [bookingId, trimmedName, trimmedEmail, trimmedCompany, trimmedTeam, trimmedDate, trimmedTime]
       );
-    } else {
-      console.warn('[DATABASE] DATABASE_URL is not configured. Booking saved in local memory preview.');
     }
 
     // 4. Send Confirmation & Admin Emails
-    await sendDemoEmails({
+    const emailResult = await sendDemoEmails({
       bookingId,
       fullName: trimmedName,
       email: trimmedEmail,
@@ -107,9 +109,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       timeSlot: trimmedTime,
     });
 
+    if (!emailResult.success) {
+      return res.status(502).json({
+        success: false,
+        bookingSaved: true,
+        bookingId,
+        notificationSent: false,
+        message: 'Your booking was saved, but email notification could not be confirmed. Do not submit it again; email contact@auraapex.in with your booking reference for meeting arrangements.',
+      });
+    }
+
     return res.status(200).json({
       success: true,
       bookingId,
+      bookingSaved: true,
+      notificationSent: true,
     });
   } catch (error: any) {
     console.error('API /api/book-demo error:', error);

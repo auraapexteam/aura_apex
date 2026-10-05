@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Clock, User, Building, Mail, Users, CheckCircle2, ChevronRight, ChevronLeft, Sparkles, AlertCircle } from 'lucide-react';
 import { DemoFormData } from '../types';
+import { DEMO_TIME_SLOTS, getDemoDates, isOfferedDemoDate } from '../../shared/demo-schedule';
+import { SUPPORT_EMAIL, supportMailto } from '../support';
 
 interface BookDemoModalProps {
   isOpen: boolean;
@@ -21,34 +23,18 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [confirmedBookingId, setConfirmedBookingId] = useState<string>('');
+  const [notificationSent, setNotificationSent] = useState(false);
 
   if (!isOpen) return null;
 
-  // Available sample dates (Next 6 working days)
-  const availableDates = [
-    { day: 'Mon', date: 'Aug 25, 2026', value: '2026-08-25' },
-    { day: 'Tue', date: 'Aug 26, 2026', value: '2026-08-26' },
-    { day: 'Wed', date: 'Aug 27, 2026', value: '2026-08-27' },
-    { day: 'Thu', date: 'Aug 28, 2026', value: '2026-08-28' },
-    { day: 'Fri', date: 'Aug 29, 2026', value: '2026-08-29' },
-    { day: 'Mon', date: 'Sep 01, 2026', value: '2026-09-01' },
-  ];
-
-  // Available time slots
-  const availableTimeSlots = [
-    { label: '09:00 AM IST', period: 'Morning' },
-    { label: '11:00 AM IST', period: 'Morning' },
-    { label: '01:30 PM IST', period: 'Afternoon' },
-    { label: '03:00 PM IST', period: 'Afternoon' },
-    { label: '04:30 PM IST', period: 'Late Afternoon' },
-    { label: '06:00 PM IST', period: 'Evening' },
-  ];
+  const availableDates = getDemoDates();
+  const availableTimeSlots = DEMO_TIME_SLOTS;
 
   const handleNext = async () => {
     setErrorMsg('');
 
     if (currentStep === 1) {
-      if (!formData.date) {
+      if (!isOfferedDemoDate(formData.date)) {
         setErrorMsg('Please select a date for your demo call.');
         return;
       }
@@ -87,14 +73,23 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
 
         const data = await response.json();
 
-        if (!response.ok || !data.success) {
+        if (data.bookingSaved && data.bookingId) {
+          setConfirmedBookingId(data.bookingId);
+          setNotificationSent(data.notificationSent === true);
+          setIsSubmitting(false);
+          setCurrentStep(4);
+          return;
+        }
+
+        if (!response.ok || !data.success || !data.bookingId) {
           setErrorMsg(data.message || 'This time slot is no longer available. Please select another time.');
           setIsSubmitting(false);
           return;
         }
 
         // Successfully booked in database
-        setConfirmedBookingId(data.bookingId || `APEX-2026-${Math.random().toString(36).substring(2, 8).toUpperCase()}`);
+        setConfirmedBookingId(data.bookingId);
+        setNotificationSent(data.notificationSent === true);
         setIsSubmitting(false);
         setCurrentStep(4);
       } catch (err) {
@@ -124,6 +119,7 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
     });
     setErrorMsg('');
     setConfirmedBookingId('');
+    setNotificationSent(false);
     onClose();
   };
 
@@ -153,13 +149,13 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
               <span>AURA APEX DEMO WIZARD</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              {currentStep === 4 ? 'Demo Confirmed!' : 'Schedule a 1-on-1 Product Walkthrough'}
+              {currentStep === 4 ? 'Booking saved' : 'Schedule a 1-on-1 Product Walkthrough'}
             </h2>
             <p className="text-xs sm:text-sm text-cyber-textMuted">
               {currentStep === 1 && 'Step 1: Pick a date that fits your team schedule.'}
               {currentStep === 2 && 'Step 2: Choose your preferred time slot.'}
               {currentStep === 3 && 'Step 3: Provide your details for a tailored walkthrough.'}
-              {currentStep === 4 && 'Your personalized Aura Apex platform demo has been scheduled.'}
+              {currentStep === 4 && 'Keep your booking reference for meeting arrangements.'}
             </p>
           </div>
 
@@ -387,7 +383,7 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
 
               <div className="p-4 rounded-2xl bg-cyber-bg border border-white/10 max-w-md mx-auto text-left space-y-2 text-xs font-mono">
                 <div className="text-cyber-lime font-bold border-b border-white/10 pb-2 flex items-center justify-between">
-                  <span>BOOKING CONFIRMATION:</span>
+                  <span>BOOKING REFERENCE:</span>
                   <span className="text-cyber-lime">{confirmedBookingId}</span>
                 </div>
                 <div className="flex justify-between">
@@ -405,8 +401,7 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
               </div>
 
               <p className="text-xs text-cyber-textMuted">
-                A calendar invitation with meeting details has been sent to{' '}
-                <strong className="text-white">{formData.email}</strong>.
+                {notificationSent ? <>Your booking email was accepted for delivery to <strong className="text-white">{formData.email}</strong>. The team will contact you about meeting arrangements.</> : <>Your booking was saved, but email notification could not be confirmed. Do not submit it again. Email <a className="text-cyber-lime underline" href={supportMailto('Aura Apex demo booking', `Booking reference: ${confirmedBookingId}`)}>{SUPPORT_EMAIL}</a> with your booking reference.</>}
               </p>
 
               <button

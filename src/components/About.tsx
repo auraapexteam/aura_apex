@@ -33,10 +33,10 @@ export const About: React.FC = () => {
             {/* Description Paragraphs */}
             <div className="space-y-4 text-cyber-textMuted text-base sm:text-lg leading-relaxed">
               <p>
-                We founded Aura Apex on a simple belief: the fitness industry deserved the same technological sophistication as finance, healthcare, and enterprise software.
+                Aura Apex brings gym membership, check-in and personal fitness tools together so members can keep their routine in one place.
               </p>
               <p>
-                Our mission is to democratize access to elite fitness infrastructure — giving every gym, trainer, and user the intelligent tools that were once only available to the biggest players.
+                Our aim is to make everyday gym operations easier to manage, with a customer app and a web portal for gym teams.
               </p>
             </div>
 
@@ -47,8 +47,8 @@ export const About: React.FC = () => {
                   <Target className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Democratized Tech</h4>
-                  <p className="text-xs text-cyber-textMuted mt-0.5">Bringing elite software capabilities to gym owners and trainers worldwide.</p>
+                  <h4 className="text-sm font-bold text-white">Everyday tools</h4>
+                  <p className="text-xs text-cyber-textMuted mt-0.5">Memberships, attendance and personal fitness logs.</p>
                 </div>
               </div>
 
@@ -58,7 +58,7 @@ export const About: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Unified Ecosystem</h4>
-                  <p className="text-xs text-cyber-textMuted mt-0.5">Connecting members, operators, and partners into one intelligent layer.</p>
+                  <p className="text-xs text-cyber-textMuted mt-0.5">Connecting member accounts with gym operations.</p>
                 </div>
               </div>
             </div>
@@ -80,25 +80,25 @@ export const About: React.FC = () => {
                 <div className="flex items-center gap-4">
                   {/* Founder Monogram Avatar */}
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyber-lime/20 to-cyber-lime/5 border border-cyber-lime/40 flex items-center justify-center text-cyber-lime font-extrabold text-2xl shadow-lime-glow-sm">
-                    TJ
+                    AA
                   </div>
                   <div>
                     <h3 className="text-xl font-extrabold text-white tracking-tight">
-                      Tanvi Jain
+                      Aura Apex
                     </h3>
                     <p className="text-xs font-mono text-cyber-lime font-semibold mt-0.5">
-                      Founder &amp; CEO, Aura Apex
+                      Gym and fitness platform
                     </p>
                   </div>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-cyber-bg border border-white/5 space-y-3">
                   <p className="text-xs sm:text-sm text-gray-300 italic leading-relaxed">
-                    &ldquo;Fitness isn&apos;t just about equipment—it&apos;s about connection, intelligence, and continuous progression. We built Aura Apex to elevate every single touchpoint in the fitness journey.&rdquo;
+                    A useful gym routine starts with clear membership information, straightforward check-ins and a place to track your progress.
                   </p>
                   <div className="flex items-center gap-2 pt-2 border-t border-white/5 text-[11px] font-mono text-cyber-textMuted">
                     <Award className="w-4 h-4 text-cyber-lime" />
-                    <span>LEADERSHIP VISION &bull; AURA APEX</span>
+                    <span>OUR FOCUS &bull; AURA APEX</span>
                   </div>
                 </div>
               </div>

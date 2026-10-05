@@ -8,58 +8,58 @@ export const WhyAuraApex: React.FC = () => {
 
   const features: FeatureItem[] = [
     {
-      id: 'ai-powered',
-      title: 'AI Powered',
+      id: 'personal-logbook',
+      title: 'Personal Logbook',
       description:
-        'Machine learning models that continuously adapt to user behavior and optimize fitness outcomes in real time.',
+        'A place to record your own fitness habits and progress.',
       iconName: 'Cpu',
       details:
-        'Our algorithms analyze workout logs, recovery metrics, and attendance patterns to deliver hyper-personalized training paths for members while assisting trainers with intelligent recommendations.',
+        'Enter weight, workouts and daily habits manually, and review your own fitness records in one place.',
     },
     {
       id: 'data-driven',
       title: 'Data Driven',
       description:
-        'Every decision backed by structured, real-time data flowing across the entire member lifecycle.',
+        'Keep membership, payment and attendance records together.',
       iconName: 'BarChart3',
       details:
-        'Unified telemetry captures member check-ins, class bookings, equipment usage, and trainer sessions into a clean single source of truth.',
+        'Gym teams can view member records, membership status, payments and check-ins in the web portal.',
     },
     {
       id: 'smart-analytics',
-      title: 'Smart Analytics',
+      title: 'Gym Dashboards',
       description:
-        'Predictive dashboards surface churn risk, revenue opportunities, and performance trends before they become problems.',
+        'Views of gym activity for everyday administration.',
       iconName: 'LineChart',
       details:
-        'Receive automated alerts on member engagement drops and revenue forecasts so facility managers can take proactive retention steps.',
+        'The portal provides operational views for gym administration, including memberships, payments and check-ins.',
     },
     {
       id: 'flexible-memberships',
       title: 'Flexible Memberships',
       description:
-        'Dynamic pricing, pay-as-you-go, and bundled models that fit every gym\'s business and every member\'s lifestyle.',
+        'View the membership options offered by your gym.',
       iconName: 'CreditCard',
       details:
-        'Support multi-pass access, drop-in punch cards, recurring subscription tiers, and corporate wellness partnerships with automated billing.',
+        'Gyms define their available plans and prices. Check the plan and checkout information before purchasing.',
     },
     {
       id: 'business-growth',
-      title: 'Business Growth',
+      title: 'Member Management',
       description:
-        'Integrated marketing, referral, and retention tools designed to grow gym revenue month-over-month.',
+        'Manage gym memberships and joining requests.',
       iconName: 'TrendingUp',
       details:
-        'Automate lead capture, referral reward codes, and win-back email sequences to consistently drive high member acquisition and lifetime value.',
+        'Keep track of gym members and their plan status through the portal, with member records available to the gym team.',
     },
     {
       id: 'secure-platform',
-      title: 'Secure Platform',
+      title: 'Account Access',
       description:
-        'Enterprise-grade encryption, SOC 2 compliance, and GDPR-ready infrastructure protecting every record.',
+        'Sign-in and role-based tools for members and gym teams.',
       iconName: 'ShieldCheck',
       details:
-        'Bank-level AES-256 data encryption at rest and in transit, strict RBAC controls, and compliant payment gateway integrations.',
+        'Account requests use authentication and HTTPS. Read the privacy review draft for current image access and data handling details.',
     },
   ];
 

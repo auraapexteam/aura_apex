@@ -6,27 +6,27 @@ import { Rocket, Building2, Cpu, Globe } from 'lucide-react';
 export const Timeline: React.FC = () => {
   const timelineData: (TimelineItem & { icon: React.ElementType })[] = [
     {
-      year: '2021',
-      title: 'Founded',
-      description: 'Built to unify fragmented fitness tech.',
+      year: '01',
+      title: 'Explore',
+      description: 'Browse gyms and view the plans they offer.',
       icon: Rocket,
     },
     {
-      year: '2022',
-      title: 'First Platform',
-      description: '200+ gyms in 5 cities.',
+      year: '02',
+      title: 'Join',
+      description: 'Manage your gym connection and membership.',
       icon: Building2,
     },
     {
-      year: '2023',
-      title: 'AI Integrations',
-      description: 'Proprietary AI models launched.',
+      year: '03',
+      title: 'Check in',
+      description: 'Use gym QR check-in and view attendance.',
       icon: Cpu,
     },
     {
-      year: '2024',
-      title: 'Full Ecosystem',
-      description: 'All stakeholders, one platform.',
+      year: '04',
+      title: 'Track',
+      description: 'Keep a logbook of your own fitness habits.',
       icon: Globe,
     },
   ];
@@ -36,13 +36,13 @@ export const Timeline: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
           <span className="text-cyber-lime font-mono text-xs font-semibold tracking-widest uppercase">
-            // OUR JOURNEY
+            // YOUR ROUTINE
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Pioneering the Next Era of Fitness Tech
+            From finding a gym to building a routine
           </h2>
           <p className="text-cyber-textMuted text-sm sm:text-base">
-            From initial concept to full-scale platform connecting gyms, trainers, and members.
+            Explore the member journey through Aura Apex.
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export const Timeline: React.FC = () => {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-cyber-textMuted">
-                  <span>MILESTONE #{index + 1}</span>
+                  <span>STEP {index + 1}</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-cyber-lime" />
                 </div>
               </motion.div>

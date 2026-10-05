@@ -7,30 +7,30 @@ export const Stats: React.FC = () => {
     {
       id: 'stat-1',
       icon: Users,
-      value: '50K+',
-      label: 'Active Users',
-      description: 'Fitness enthusiasts tracking workouts and achieving peak performance daily.',
+      value: 'Members',
+      label: 'Your gym, your account',
+      description: 'Browse gyms and keep track of your membership in the app.',
     },
     {
       id: 'stat-2',
       icon: Building2,
-      value: '2K+',
-      label: 'Gyms Connected',
-      description: 'Fitness facilities leveraging our intelligent operating system.',
+      value: 'Gyms',
+      label: 'Membership management',
+      description: 'Tools for plans, members, payments and check-ins.',
     },
     {
       id: 'stat-3',
       icon: HeartHandshake,
-      value: '98%',
-      label: 'Satisfaction',
-      description: 'Unmatched retention and satisfaction scores across all stakeholders.',
+      value: 'Fitness',
+      label: 'Personal logbook',
+      description: 'Record your own fitness habits and progress over time.',
     },
     {
       id: 'stat-4',
       icon: MapPin,
-      value: '40+',
-      label: 'Cities',
-      description: 'Rapidly growing network across major metropolitan hubs.',
+      value: 'Support',
+      label: 'A place to ask',
+      description: 'Reach the team for account, app and privacy questions.',
     },
   ];
 
@@ -39,13 +39,13 @@ export const Stats: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-cyber-lime font-mono text-xs font-semibold tracking-widest uppercase">
-            // PROVEN IMPACT
+            // THE PLATFORM
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-            Powering Fitness at Scale
+            Built around your gym routine
           </h2>
           <p className="text-cyber-textMuted mt-3 text-sm sm:text-base">
-            Connecting thousands of users, gyms, and trainers into a single high-performance network.
+            One app for members, with a web platform for gym operations.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export const Stats: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight group-hover:text-cyber-lime transition-colors">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight group-hover:text-cyber-lime transition-colors">
                       {item.value}
                     </div>
                     <div className="text-base font-semibold text-gray-200">

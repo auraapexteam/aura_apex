@@ -20,9 +20,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
   }, []);
 
   const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Ecosystem', href: '#ecosystem' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'About', href: '/#about' },
+    { name: 'Ecosystem', href: '/#ecosystem' },
+    { name: 'Support', href: '/support' },
   ];
 
   return (
@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
         <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <a
-            href="#"
+            href="/"
             className="flex items-center gap-1.5 sm:gap-3 group text-white font-extrabold text-[13px] sm:text-xl tracking-wider"
           >
             <div className="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-xl bg-cyber-card border border-cyber-cardBorder group-hover:border-cyber-lime transition-all duration-300 shadow-lime-glow-sm">
@@ -82,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
 
             {/* Explore Platform CTA */}
             <a
-              href="#ecosystem"
+              href="/#ecosystem"
               className="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyber-card border border-white/10 text-white font-semibold text-xs hover:border-cyber-lime/50 hover:text-cyber-lime transition-all duration-300"
             >
               <Compass className="w-3.5 h-3.5 text-cyber-lime" />
@@ -138,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBookDemo }) => {
 
               <div className="pt-2 space-y-3">
                 <a
-                  href="#ecosystem"
+                  href="/#ecosystem"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyber-bg border border-white/10 text-white font-semibold text-sm hover:border-cyber-lime"
                 >
