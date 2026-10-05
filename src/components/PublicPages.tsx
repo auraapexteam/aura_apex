@@ -21,7 +21,7 @@ function PageLayout({ title, description, icon: Icon, children, review = false }
       <p className="text-cyber-textMuted text-base sm:text-lg leading-7 mt-4 max-w-2xl">{description}</p>
       {review && <aside aria-label="Document review status" className="mt-7 border-l-2 border-cyber-lime pl-4 text-sm leading-6 text-gray-300">
         <strong className="block text-cyber-lime">Review draft — not a final published policy</strong>
-        Prepared for owner review. Operator details, retention, access controls and consent arrangements still need approval and verification. This page does not establish store or legal compliance.
+        Prepared for owner review. Retention, access controls and consent arrangements still need approval and verification. This page does not establish store or legal compliance.
       </aside>}
       <div className="mt-10 rounded-2xl border border-cyber-cardBorder bg-cyber-card p-5 sm:p-9 space-y-8">{children}</div>
     </div>
@@ -31,7 +31,7 @@ function PageLayout({ title, description, icon: Icon, children, review = false }
 export function PrivacyPage() {
   return <PageLayout title="Privacy policy" description="How Aura Apex handles account, gym, fitness and website information." icon={ShieldCheck} review>
     <Section title="About this draft">
-      <p>This draft covers the Aura Apex Android and iOS apps, related account services and this website. Operating business details await owner confirmation. Privacy questions can be sent to <a className={linkClass} href={supportMailto('Aura Apex privacy question')}>{SUPPORT_EMAIL}</a>.</p>
+      <p>This draft covers the Aura Apex Android and iOS apps, related account services and this website. Aura Apex is operated by Vedant Bute, a sole proprietor trading as Aura Apex, at A-405, A Wing, Vision Indradhanu, Phase 2, Aher, Chikhali, Pimpri-Chinchwad, Pune, Maharashtra 412105, India. Privacy questions can be sent to <a className={linkClass} href={supportMailto('Aura Apex privacy question')}>{SUPPORT_EMAIL}</a>.</p>
       <p>Questions and privacy requests can be sent to <a className={linkClass} href={supportMailto('Aura Apex privacy request')}>{SUPPORT_EMAIL}</a>. A final effective date will be set when the approved policy is published.</p>
     </Section>
     <Section title="Information handled by the app">
@@ -70,12 +70,12 @@ export function PrivacyPage() {
 
 export function TermsPage() {
   return <PageLayout title="Terms of service" description="Proposed service terms for the Aura Apex app and related services." icon={FileText} review>
-    <Section title="Status and scope"><p>These are proposed terms for owner review, not approved contractual terms or a custom Apple EULA. Aura Apex supports gym discovery, memberships, payments, check-ins and personal fitness tracking. The operator, service-provider responsibilities, eligibility rules, dispute process and acceptance mechanism still need final approval.</p></Section>
+    <Section title="Status and scope"><p>These are proposed terms for owner review, not approved contractual terms or a custom Apple EULA. Aura Apex is operated by Vedant Bute, a sole proprietor trading as Aura Apex. Its public business address is A-405, A Wing, Vision Indradhanu, Phase 2, Aher, Chikhali, Pimpri-Chinchwad, Pune, Maharashtra 412105, India. Aura Apex supports gym discovery, memberships, payments, check-ins and personal fitness tracking. Service-provider responsibilities, eligibility rules, dispute process and acceptance mechanism still need final approval.</p></Section>
     <Section title="Accounts and acceptable use"><p>Use accurate account information, keep sign-in credentials private and contact support if you suspect unauthorised access. Do not use another person's account, misuse check-in codes, falsify payment/attendance records, access someone else's data or interfere with service security.</p><p>Upload only information and images you are entitled to provide. Your content is used to deliver the features you choose, subject to the actual sharing settings and the approved privacy policy. No blanket permission for unrelated use is proposed.</p></Section>
     <Section title="Gym services and payments"><p>Available plans, prices and membership conditions are shown by the relevant gym and checkout flow. Ask the gym about service availability or payment disputes. A final set of terms must identify who supplies each purchased service and the applicable cancellation/refund conditions; this draft does not invent those rules.</p><p>Account deletion does not automatically issue a refund or cancel a separate payment mandate. Support must explain any additional action needed for your account or payment arrangement.</p></Section>
     <Section title="Privacy and account closure"><p>Read the <a href="/privacy-policy" className={linkClass}>privacy review draft</a> for information handling and current review limitations. It does not replace required consent. Use the in-app deletion control or <a href="/delete-account" className={linkClass}>external deletion request</a>; the verified result and any necessary retention must be communicated.</p></Section>
     <Section title="Availability and distribution"><p>Connectivity, maintenance or provider outages can affect the service. Account restrictions, support/appeal procedures and the treatment of paid memberships need final approval. App Store distribution also uses the applicable software licence terms; these service terms do not replace them.</p></Section>
-    <Section title="Contact"><p>Send questions to <a className={linkClass} href={supportMailto('Aura Apex terms question')}>{SUPPORT_EMAIL}</a>. The final document will include approved operator details, an effective date and lawful dispute terms.</p></Section>
+    <Section title="Contact"><p>Send questions to <a className={linkClass} href={supportMailto('Aura Apex terms question')}>{SUPPORT_EMAIL}</a>. The final document will include an effective date and lawful dispute terms.</p></Section>
   </PageLayout>;
 }
 
