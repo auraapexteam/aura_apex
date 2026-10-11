@@ -7,6 +7,16 @@ const resend = resendApiKey ? new Resend(resendApiKey) : null;
 export const ADMIN_EMAIL = process.env.CONTACT_EMAIL || 'auraapex04@gmail.com';
 export const SENDER_EMAIL = process.env.SENDER_EMAIL || 'Aura Apex <onboarding@resend.dev>';
 
+// Contact uses an explicit sender; legacy demo-booking settings remain unchanged.
+const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL?.trim() || 'contact@auraapex.in';
+const CONTACT_SENDER = process.env.SENDER_EMAIL?.trim() || '';
+const CONTACT_UNAVAILABLE = 'The contact form is unavailable. Please email contact@auraapex.in directly.';
+const CONTACT_UNCONFIRMED = 'Email delivery could not be confirmed. Please email contact@auraapex.in directly.';
+
+export function isContactEmailConfigured(): boolean {
+  return Boolean(resend && resendApiKey?.trim() && CONTACT_SENDER);
+}
+
 /**
  * Format current timestamp in Asia/Kolkata timezone
  */
@@ -19,7 +29,7 @@ export function getKolkataTimestamp(): string {
 }
 
 /**
- * Send Contact Form Email to Admin (auraapex04@gmail.com)
+ * Send a contact notification to the configured support inbox.
  */
 export async function sendContactEmail(payload: {
   fullName: string;
@@ -27,9 +37,8 @@ export async function sendContactEmail(payload: {
   phone?: string;
   message: string;
 }): Promise<{ success: boolean; id?: string; error?: string }> {
-  if (!resend) {
-    console.warn('[EMAIL SERVICE] RESEND_API_KEY is not configured. Email notification simulated in dev mode.');
-    return { success: true, id: 'dev-mode-simulated' };
+  if (!resend || !isContactEmailConfigured()) {
+    return { success: false, error: CONTACT_UNAVAILABLE };
   }
 
   const timestamp = getKolkataTimestamp();
@@ -64,15 +73,15 @@ export async function sendContactEmail(payload: {
         <p style="white-space: pre-wrap; color: #e4e4e7; margin: 0; line-height: 1.6;">${escapeHtml(payload.message)}</p>
       </div>
       <footer style="margin-top: 24px; font-size: 12px; color: #a1a1aa; border-top: 1px solid #222422; padding-top: 12px; text-align: center;">
-        Aura Apex Production Notification Engine &bull; Recipient: ${ADMIN_EMAIL}
+        Aura Apex Production Notification Engine &bull; Recipient: ${escapeHtml(CONTACT_RECIPIENT)}
       </footer>
     </div>
   `;
 
   try {
     const response = await resend.emails.send({
-      from: SENDER_EMAIL,
-      to: [ADMIN_EMAIL],
+      from: CONTACT_SENDER,
+      to: [CONTACT_RECIPIENT],
       subject: `New Contact Message from ${payload.fullName}`,
       html: htmlContent,
       replyTo: payload.email,
@@ -80,13 +89,16 @@ export async function sendContactEmail(payload: {
 
     if (response.error) {
       console.warn('[EMAIL SERVICE] Resend email warning:', response.error.message);
-      return { success: false, error: response.error.message };
+      return { success: false, error: CONTACT_UNCONFIRMED };
     }
 
-    return { success: true, id: response.data?.id };
+    const messageId = response.data?.id;
+    return typeof messageId === 'string' && messageId.trim()
+      ? { success: true, id: messageId }
+      : { success: false, error: CONTACT_UNCONFIRMED };
   } catch (err: any) {
     console.error('[EMAIL SERVICE] Contact email send error:', err.message || err);
-    return { success: false, error: err.message || 'Failed to deliver email message' };
+    return { success: false, error: CONTACT_UNCONFIRMED };
   }
 }
 
