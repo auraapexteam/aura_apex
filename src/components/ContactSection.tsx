@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, User, MessageSquare, Send, CheckCircle2, AlertCircle, Phone, MapPin, Sparkles } from 'lucide-react';
 import { ContactFormData } from '../types';
 
+const SUPPORT_EMAIL = 'contact@auraapex.in';
+
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
@@ -115,7 +117,7 @@ export const ContactSection: React.FC = () => {
             <div className="space-y-4 pt-4">
               {/* Email */}
               <a
-                href="mailto:auraapex04@gmail.com"
+                href={`mailto:${SUPPORT_EMAIL}`}
                 className="p-4 rounded-2xl bg-cyber-card border border-cyber-cardBorder flex items-center gap-4 hover:border-cyber-lime/50 transition-colors group"
               >
                 <div className="p-3 rounded-xl bg-cyber-bg border border-white/10 text-cyber-lime group-hover:border-cyber-lime">
@@ -124,7 +126,7 @@ export const ContactSection: React.FC = () => {
                 <div>
                   <div className="text-xs text-cyber-textMuted font-mono">EMAIL US</div>
                   <div className="text-sm font-semibold text-white group-hover:text-cyber-lime transition-colors">
-                    auraapex04@gmail.com
+                    {SUPPORT_EMAIL}
                   </div>
                 </div>
               </a>
@@ -168,11 +170,17 @@ export const ContactSection: React.FC = () => {
                 <span className="text-xs font-mono text-cyber-lime">AURA APEX CONNECT</span>
               </div>
 
+              <p className="mb-5 text-sm text-cyber-textMuted">
+                Prefer email? <a className="text-cyber-lime underline" href={`mailto:${SUPPORT_EMAIL}`}>Email support</a>.
+                {' '}This opens a draft in your email app. Review and send it to submit your message.
+              </p>
+
               {/* Server Error Banner */}
               {serverError && (
                 <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{serverError}</span>
+                  <a className="shrink-0 text-cyber-lime underline" href={`mailto:${SUPPORT_EMAIL}`}>Email support</a>
                 </div>
               )}
 
@@ -188,9 +196,9 @@ export const ContactSection: React.FC = () => {
                     <div className="w-16 h-16 rounded-full bg-cyber-lime/20 border border-cyber-lime text-cyber-lime flex items-center justify-center mx-auto shadow-lime-glow">
                       <CheckCircle2 className="w-8 h-8" />
                     </div>
-                    <h4 className="text-2xl font-bold text-white">Thank you! Your message has been sent successfully.</h4>
+                    <h4 className="text-2xl font-bold text-white">Your message was accepted for delivery.</h4>
                     <p className="text-sm text-cyber-textMuted max-w-md mx-auto">
-                      We have received your message and sent a notification to <strong className="text-cyber-lime">auraapex04@gmail.com</strong>. Our team will get back to you shortly.
+                      The email provider accepted your message for delivery to the Aura Apex team. You can also reach us at <a className="text-cyber-lime underline" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
                     </p>
                     <button
                       onClick={() => {
