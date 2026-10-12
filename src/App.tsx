@@ -11,15 +11,20 @@ import { BookDemoModal } from './components/BookDemoModal';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Footer } from './components/Footer';
 import { DownloadPage } from './components/DownloadPage';
+import { StoreSupportPage } from './components/StoreSupportPage';
+import { resolvePage } from './routing';
 
 export function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [isDownloadPage, setIsDownloadPage] = useState(window.location.hash === '#download');
+  const [location, setLocation] = useState({ pathname: window.location.pathname, hash: window.location.hash });
+  const page = resolvePage(location.pathname, location.hash);
+  const isDownloadPage = page === 'download';
+  const publicPage = page !== 'home' && !isDownloadPage;
 
   useEffect(() => {
     const handleHashChange = () => {
+      setLocation({ pathname: window.location.pathname, hash: window.location.hash });
       const downloading = window.location.hash === '#download';
-      setIsDownloadPage(downloading);
       requestAnimationFrame(() => {
         const section = document.getElementById(window.location.hash.slice(1));
         if (!downloading && section) section.scrollIntoView();
@@ -27,8 +32,18 @@ export function App() {
       });
     };
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
+    };
   }, []);
+
+  useEffect(() => {
+    document.title = publicPage
+      ? `${page === 'delete-account' ? 'Request account deletion' : page === 'support' ? 'Support' : 'Page not found'} | Aura Apex`
+      : 'Aura Apex | Building the Future of Fitness';
+  }, [page, publicPage]);
 
   const openBookDemo = () => setIsDemoModalOpen(true);
   const closeBookDemo = () => setIsDemoModalOpen(false);
@@ -36,11 +51,11 @@ export function App() {
   return (
     <div className="bg-cyber-bg text-white min-h-screen relative font-sans">
       {/* Top Navbar */}
-      <Navbar onOpenBookDemo={openBookDemo} />
+      {!publicPage && <Navbar onOpenBookDemo={openBookDemo} />}
 
       {/* Main Content Sections */}
       <main>
-        {isDownloadPage ? <DownloadPage /> : <>
+        {publicPage ? <StoreSupportPage page={page} /> : isDownloadPage ? <DownloadPage /> : <>
         <Hero onOpenBookDemo={openBookDemo} />
         <Stats />
         <About />
@@ -52,10 +67,10 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenBookDemo={openBookDemo} />
+      {!publicPage && <Footer onOpenBookDemo={openBookDemo} />}
 
       {/* Interactive 3-Step Book a Demo Modal */}
-      <BookDemoModal isOpen={isDemoModalOpen} onClose={closeBookDemo} />
+      {!publicPage && <BookDemoModal isOpen={isDemoModalOpen} onClose={closeBookDemo} />}
 
       {/* Floating Scroll To Top Button */}
       <ScrollToTop />
