@@ -24,7 +24,7 @@ function PrivacyPolicyContent() {
         <li><strong className="text-white">Optional fitness information:</strong> details you choose to provide, such as date of birth, gender, height, weight, fitness goals, exercise experience, diet preferences, health conditions or injuries, and fitness activity you record. These fields are optional; the app provides a way to continue without the optional profile information.</li>
         <li><strong className="text-white">Images:</strong> an optional profile image you choose to provide where the feature is available, and gym photos supplied for display. Images may be displayed in the app or to gym staff as relevant to the feature. Do not put medical documents or other confidential material in a profile or gym image.</li>
         <li><strong className="text-white">Support and website inquiries:</strong> the contact details and message you submit. Demo requests also include your company or gym name, team size and selected appointment details.</li>
-        <li><strong className="text-white">Technical information:</strong> service-request and error information, such as network addresses, request times and error details, used to operate and protect the service.</li>
+        <li><strong className="text-white">Technical information:</strong> service-request and error information, such as network addresses, request and response times, and error details, used to operate and protect the service.</li>
       </ul>
     </Section>
     <Section title="Location, photos and your choices">
