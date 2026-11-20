@@ -94,6 +94,9 @@ test('privacy page is a public notice with operator, choices and usable request 
   assert.match(html, /contact@auraapex.in/);
   assert.match(html, /Pune, Maharashtra 412105, India/);
   assert.match(html, /Optional fitness information/);
+  assert.match(html, /device identifiers, checkout interactions, and crash and diagnostic information/);
+  assert.match(html, /payment functionality, analytics and product personalisation/);
+  assert.match(html, /href="https:\/\/razorpay.com\/buyer-privacy-notice\/"/);
   assert.match(html, /enter a city manually or leave it blank/);
   assert.match(html, /href="\/delete-account"/);
   assert.match(html, /href="\/support"/);
