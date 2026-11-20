@@ -12,7 +12,14 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { Footer } from './components/Footer';
 import { DownloadPage } from './components/DownloadPage';
 import { StoreSupportPage } from './components/StoreSupportPage';
-import { resolvePage } from './routing';
+import { resolvePage, type Page } from './routing';
+
+const publicPageTitles: Partial<Record<Page, string>> = {
+  support: 'Support',
+  'delete-account': 'Request account deletion',
+  'privacy-policy': 'Privacy Policy',
+  'not-found': 'Page not found',
+};
 
 export function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
@@ -40,10 +47,11 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    document.title = publicPage
-      ? `${page === 'delete-account' ? 'Request account deletion' : page === 'support' ? 'Support' : 'Page not found'} | Aura Apex`
+    const publicTitle = publicPageTitles[page];
+    document.title = publicTitle
+      ? `${publicTitle} | Aura Apex`
       : 'Aura Apex | Building the Future of Fitness';
-  }, [page, publicPage]);
+  }, [page]);
 
   const openBookDemo = () => setIsDemoModalOpen(true);
   const closeBookDemo = () => setIsDemoModalOpen(false);

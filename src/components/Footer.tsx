@@ -24,6 +24,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBookDemo }) => {
         <nav aria-label="App support" className="flex flex-wrap gap-x-6 gap-y-3 pb-8 text-sm text-cyber-lime">
           <a href="/support" className="underline underline-offset-4 hover:text-white">Aura Apex support</a>
           <a href="/delete-account" className="underline underline-offset-4 hover:text-white">Request account deletion</a>
+          <a href="/privacy-policy" className="underline underline-offset-4 hover:text-white">Privacy Policy</a>
         </nav>
         
         {/* Main Footer Grid */}

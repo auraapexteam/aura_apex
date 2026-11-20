@@ -30,7 +30,7 @@ const { resolvePage } = loadSource('src/routing.ts');
 const icon = () => null;
 const { StoreSupportPage } = loadSource('src/components/StoreSupportPage.tsx', {
   '../support': support,
-  'lucide-react': { ArrowLeft: icon, LifeBuoy: icon, Mail: icon, Trash2: icon },
+  'lucide-react': { ArrowLeft: icon, LifeBuoy: icon, Mail: icon, ShieldCheck: icon, Trash2: icon },
 });
 const renderPage = (page) => renderToStaticMarkup(React.createElement(StoreSupportPage, { page }));
 
@@ -38,12 +38,15 @@ test('external resource resolves on direct visits and trailing slashes', () => {
   assert.equal(resolvePage('/delete-account', '#download'), 'delete-account');
   assert.equal(resolvePage('/delete-account/'), 'delete-account');
   assert.equal(resolvePage('/support/'), 'support');
+  assert.equal(resolvePage('/privacy-policy'), 'privacy-policy');
+  assert.equal(resolvePage('/privacy-policy/'), 'privacy-policy');
 });
 
 test('existing home anchors and download route remain distinct', () => {
   assert.equal(resolvePage('/', '#contact'), 'home');
   assert.equal(resolvePage('/', '#download'), 'download');
   assert.equal(resolvePage('/support', '#download'), 'support');
+  assert.equal(resolvePage('/privacy-policy', '#download'), 'privacy-policy');
   assert.equal(resolvePage('/unknown'), 'not-found');
 });
 
@@ -82,4 +85,29 @@ test('not-found resource offers functioning navigation rather than rendering hom
   assert.match(html, /Page not found/);
   assert.match(html, /href="\/support"/);
   assert.match(html, /href="\/"/);
+});
+
+test('privacy page is a public notice with operator, choices and usable request links', () => {
+  const html = renderPage('privacy-policy');
+  assert.match(html, /<h1[^>]*>Privacy Policy<\/h1>/);
+  assert.match(html, /Vedant Bute/);
+  assert.match(html, /contact@auraapex.in/);
+  assert.match(html, /Pune, Maharashtra 412105, India/);
+  assert.match(html, /Optional fitness information/);
+  assert.match(html, /enter a city manually or leave it blank/);
+  assert.match(html, /href="\/delete-account"/);
+  assert.match(html, /href="\/support"/);
+  assert.match(html, /people aged 13 and older/);
+  assert.doesNotMatch(html, /Page not found|<form|<input|type="password"/);
+});
+
+test('privacy and deletion copy reflect minimisation without promising instant completion', () => {
+  for (const page of ['privacy-policy', 'delete-account']) {
+    const html = renderPage(page);
+    assert.match(html, /deleted labels/);
+    assert.match(html, /email, phone, address/);
+    assert.match(html, /Membership, payment and attendance facts/);
+    assert.match(html, /fixed completion time/);
+    assert.doesNotMatch(html, /including names and contact details|all data is deleted immediately/i);
+  }
 });
